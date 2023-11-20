@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ticket">
+	
+	<resultMap type="eagles.ticket.pay.vo.TicketPayVO" id="ticketMap">
+		<result column="TICKET_CD" property="ticketCd"/>
+		<result column="TICKET_ADULT" property="ticketAdult"/>
+		<result column="TICKET_STD" property="ticketStd"/>
+		<result column="TICKET_CHILD" property="ticketChild"/>
+		<result column="TICKET_SEAT" property="ticketSeat"/>
+		<result column="MEM_ID" property="memId"/>
+	</resultMap>
+
+	<select id="showTicketAll" parameterType="String" resultType="eagles.ticket.vo.TicketPayVO">
+	SELECT	TICKET_CD as ticketCd ,
+	     	TICKET_ADULT as ticketAdult ,
+	     	TICKET_STD as ticketStd ,
+	     	TICKET_CHILD as ticketChild ,
+	     	TICKET_SEAT as ticketSeat ,
+	     	TICKET_PAY_METHOD as ticketPayMethod,
+	     	MEM_ID as memId
+			FROM TICKET a
+			JOIN Ticket_pay b 
+			where a.ticket_cd = b.ticket_cd
+	 		and mem_id = #{memID}
+	</select>
+	
+	<select id="showTicket" parameterType="String" resultType="eagles.ticket.vo.TicketVO">
+	SELECT
+	      TICKET_CD as ticketCd ,
+	      TICKET_ADULT as ticketAdult ,
+	      TICKET_STD as ticketStd ,
+	      TICKET_CHILD as ticketChild ,
+	      TICKET_SEAT as ticketSeat ,
+	      MEM_ID as memId
+	FROM TICKET
+	WHERE TICKET_CD = #{ticketCd}
+	
+	
+	</select>
+<select id="getTicketCd" parameterType="String" resultType="eagles.ticket.vo.TicketVO">
+select 
+		ticket_cd as ticketCd
+		from ticket
+		where ticket_seat = #{ticketSeat}
+
+</select>
+
+<delete id="deleteTicket">
+delete ticket where ticket_cd = #{ticketCd}
+</delete>
+
+
+</mapper>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pay">
+
+<select id="myAllpay" parameterType="String" resultType="eagles.ticket.pay.vo.TicketPayVO">
+
+				select 
+								a.TICKET_PAY_CD as ticketPayCd,
+								a.TICKET_PAY_METHOD as ticketPayMethod,
+								a.TICKET_PAY_PRICE as ticketPayPrice,
+								b.TICKET_ADULT as ticketAdult,
+								b.TICKET_STD as ticketStudent, 
+								b.TICKET_CHILD as ticketChild,
+								a.TICKET_PAY_DATE as ticketPayDate,
+								a.TICKET_PAY_OK as ticketPayOk, 
+								a.TICKET_CD as ticketCd, 
+								b.mem_id as memId 
+								
+								from ticket_pay a, ticket b 
+								where a.ticket_cd = b.ticket_cd 
+								and b.mem_id = #{memId}
+								and a.ticket_pay_ok = '1'
+</select>
+
+<insert id="insertTicket" parameterType="eagles.ticket.vo.TicketVO">
+insert into ticket(TICKET_CD, TICKET_ADULT, TICKET_STD, TICKET_CHILD, TICKET_SEAT, MEM_ID) values(ticketcd.nextval,0,0,0, #{ticketSeat},#{memId})
+
+</insert>
+
+<update id="updateTicket" parameterType="eagles.ticket.vo.TicketVO">
+			update ticket set 
+						ticket_adult = #{ticketAdult}, 
+						ticket_std = #{ticketStd}, 
+						ticket_child = #{ticketChild}
+						where ticket_seat = #{ticketSeat}
+
+</update>
+
+<insert id="insertTicketPay" parameterType="eagles.ticket.pay.vo.TicketPayVO">
+			INSERT INTO 
+						TICKET_PAY( TICKET_PAY_CD, TICKET_PAY_METHOD,
+					 	TICKET_PAY_PRICE, TICKET_PAY_DATE, TICKET_PAY_OK, 
+					 	TICKET_CD)
+					 VALUES(paycode.nextval,'카카오페이', #{ticketPayPrice},sysdate,'1', #{ticketCd})
+</insert>
+
+<update id="updateTicketPay" parameterType="eagles.ticket.pay.vo.TicketPayVO">
+
+update ticket_pay set ticket_pay_ok = '환불' where ticket_cd = #{ticketCd}
+</update>
+
+<select id="myAllCancelPay" parameterType="String" resultType="eagles.ticket.pay.vo.TicketPayVO">
+
+						select 
+								a.TICKET_PAY_CD as ticketPayCd,
+								a.TICKET_PAY_METHOD as ticketPayMethod,
+								a.TICKET_PAY_PRICE as ticketPayPrice,
+								b.TICKET_ADULT as ticketAdult,
+								b.TICKET_STD as ticketStudent, 
+								b.TICKET_CHILD as ticketChild,
+								a.TICKET_PAY_DATE as ticketPayDate,
+								a.TICKET_PAY_OK as ticketPayOk, 
+								a.TICKET_CD as ticketCd,
+								b.TICKET_SEAT as ticketSeat,
+								b.mem_id as memId 
+								
+								from ticket_pay a, ticket b 
+								where a.ticket_cd = b.ticket_cd 
+								and b.mem_id = #{memId}
+								and a.ticket_Pay_OK = '환불'
+
+</select>
+
+<select id="AllCancelPay" parameterType="String" resultType="eagles.ticket.pay.vo.TicketPayVO">
+
+						
+						select
+								a.TICKET_PAY_CD as ticketPayCd,
+								a.TICKET_PAY_METHOD as ticketPayMethod,
+								a.TICKET_PAY_PRICE as ticketPayPrice,
+								b.TICKET_ADULT as ticketAdult,
+								b.TICKET_STD as ticketStudent, 
+								b.TICKET_CHILD as ticketChild,
+								a.TICKET_PAY_DATE as ticketPayDate,
+								a.TICKET_PAY_OK as ticketPayOk, 
+								a.TICKET_CD as ticketCd,
+								b.TICKET_SEAT as ticketSeat,
+								b.mem_id as memId 
+								
+								from ticket_pay a, ticket b 
+								where a.ticket_cd = b.ticket_cd 
+								and a.ticket_Pay_OK = '환불'
+</select>
+
+<select id="AllTicketPay" parameterType="String" resultType="eagles.ticket.pay.vo.TicketPayVO">
+
+						
+						select
+								a.TICKET_PAY_CD as ticketPayCd,
+								a.TICKET_PAY_METHOD as ticketPayMethod,
+								a.TICKET_PAY_PRICE as ticketPayPrice,
+								b.TICKET_ADULT as ticketAdult,
+								b.TICKET_STD as ticketStudent, 
+								b.TICKET_CHILD as ticketChild,
+								a.TICKET_PAY_DATE as ticketPayDate,
+								a.TICKET_PAY_OK as ticketPayOk, 
+								a.TICKET_CD as ticketCd, 
+								b.TICKET_SEAT as ticketSeat,
+								b.mem_id as memId 
+								
+								from ticket_pay a, ticket b 
+								where a.ticket_cd = b.ticket_cd 
+								and a.ticket_pay_ok = '1'
+</select>
+
+
+</mapper>

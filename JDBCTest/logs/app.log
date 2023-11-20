@@ -1,0 +1,2 @@
+2023-06-09 15:37:00.754 [main] DEBUG log4jexam.sql.Query - 쿼리문 :  insert into mymember  (mem_id, mem_name, mem_tel, mem_addr)   values(?, ?, ?, ?)
+2023-06-09 15:37:00.756 [main] DEBUG log4jexam.sql.Parameter - 파라미터 정보 : (b0011,문수빈,999-99,광주시)

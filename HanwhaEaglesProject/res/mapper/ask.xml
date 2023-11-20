@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ask">
+
+<select id="getAskAll" resultType="eagles.ask.vo.AskVO">
+
+	select ask_cd as askCd, ask_title as askTitle, ask_content as askContent,
+       ask_date as askDate, ask_answer as askAnswer, ask_answer_time as askAnswerTime,
+       mem_id as memId
+	from ask
+
+</select>
+
+<select id="getAnswerYet" resultType="eagles.ask.vo.AskVO">
+
+	select ask_cd as askCd, ask_title as askTitle, ask_content as askContent, ask_date as askDate,
+    	   ask_answer as askAnswer, ask_answer_time as askAnswerTime, mem_id as memId
+	from ask
+	where ask_answer is null
+
+</select>
+
+<select id="getAskByMem" resultType="eagles.ask.vo.AskVO">
+
+	select ask_cd as askCd, ask_title as askTitle, ask_content as askContent, ask_date as askDate,
+    	   ask_answer as askAnswer, ask_answer_time as askAnswerTime, mem_id as memId
+	from ask
+	where mem_id = #{memId}
+
+</select>
+
+<select id="readAsk" resultType="eagles.ask.vo.AskVO">
+
+	select ask_cd as askCd, ask_title as askTitle, ask_content as askContent, ask_date as askDate,
+    	   ask_answer as askAnswer, ask_answer_time as askAnswerTime, mem_id as memId
+	from ask
+	where ask_cd = #{askCd}
+	
+</select>
+
+
+<insert id="insertAsk">
+
+	insert into ask (ask_cd, ask_title, ask_content, ask_date, mem_id)
+	values ('k' || LPAD(INSERTASK.NEXTVAL, 5, '0'), #{askTitle}, #{askContent}, sysdate, #{memId})
+
+</insert>
+
+<!-- <update id="updateAsk"> -->
+
+
+	
+
+<!-- </update> -->
+
+<delete id="deleteAsk">
+
+	delete from ask
+	where ask_cd = #{askCd}
+
+</delete>
+
+	
+</mapper>

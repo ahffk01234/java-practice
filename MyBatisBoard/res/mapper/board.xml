@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+
+<insert id="insertBoard" parameterType="vo.BoardVO">
+	insert into jdbc_board(board_no, board_title, board_writer, board_date, board_content)
+	 values(board_seq.nextVal,#{boardTitle}, #{boardWriter}, sysdate, #{boardContent})
+</insert>
+
+<update id="updateBoard" parameterType="vo.BoardVO">
+update jdbc_board set board_title = #{boardTitle}, board_writer = #{boardWriter}, board_content = #{boardContent} where board_no = #{boardNo}
+</update>
+
+<delete id="deleteBoard" parameterType="String">
+delete from jdbc_board where board_no = #{boardNo}
+</delete>
+
+<select id="getBoard" parameterType="String" resultType="vo.BoardVO">
+select board_no as boardNo,
+		board_title as boardTitle,
+		board_writer as boardWriter,
+		board_date as boardDate,
+		board_content as boardContent
+		from jdbc_board
+		where board_no = #{boardNo}
+</select>
+
+<resultMap type="vo.BoardVO" id="boardMap">
+		<result column="board_no" property="boardNo"/>
+		<result column="board_title" property="boardTitle"/>
+		<result column="board_writer" property="boardWriter"/>
+		<result column="board_content" property="boardContent"/>
+		<result column="board_date" property="boardDate"/>
+	</resultMap>
+<select id="getAllBoard" resultMap="boardMap">
+select * from jdbc_board
+</select>
+
+<select id="checkBoard" resultType="int" parameterType="String">
+select count(*) as cnt
+from jdbc_board
+where board_no = #{boardNo}
+</select>
+
+<select id="searchBoard" parameterType="HashMap" resultType="vo.BoardVO">
+	select board_no as boardNo, 
+		   board_title as boardTitle, 
+		   board_writer as boardWriter, 
+		   board_date as boardDate,
+		   board_content as boardContent 
+		   from jdbc_board
+		   where 1 = 1
+<!-- 		   <if test = 'boardNo != null and boardNo != ""'> -->
+<!-- 		   		and board_no like '%' || #{boardNo} || '%' -->
+<!-- 		   </if> -->
+		   <if test = 'boardTitle != null and boardTitle != ""'>
+		   		and board_title like '%' || #{boardTitle} || '%'
+		   </if>
+		   <if test = 'boardWriter != null and boardWriter != ""'>
+		   		and board_writer like '%' || #{boardWriter} || '%'
+		   </if>
+		   <if test = 'boardDate != null and boardDate != ""'>
+		   		and board_date like '%' #{boardDate} || '%'
+		   </if>
+		   <if test='boardContent != null and boardContent !=""'>
+		   		and board_content like '%'|| #{boardContent} || '%'
+		   </if>
+</select>
+
+</mapper>

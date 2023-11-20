@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="teamBoard">
+
+<resultMap type="eagles.news.vo.TeamBoardVO" id="TeamboardMap">
+		<result column="teamboard_cd" property="teamboardCd" />
+		<result column="teamboard_title" property="teamboardTitle" />
+		<result column="teamboard_content" property="teamboardContent" />
+		<result column="teamboard_date" property="teamboardDate" />
+		<result column="teamboard_fix" property="teamboardFix" />
+		<result column="mem_id" property="memId" />
+		<result column="teamboard_img" property="teamboardImg" />
+		<result column="RNUM" property="rnum" />
+	</resultMap>
+
+<select id="getAllBoard" parameterType="hashMap" resultMap="TeamboardMap">
+	   WITH T AS (
+    SELECT 
+        ROW_NUMBER() OVER (ORDER BY 
+            CASE WHEN TEAMBOARD_FIX = '1' THEN 0 ELSE 1 END, 
+            TEAMBOARD_DATE DESC
+        ) RNUM, 
+        TEAMBOARD_CD, TEAMBOARD_TITLE, TEAMBOARD_CONTENT, TEAMBOARD_DATE, TEAMBOARD_FIX, MEM_ID, TEAMBOARD_IMG 
+    FROM 
+        TEAMBOARD
+)
+    
+	SELECT * FROM T
+	WHERE T.RNUM BETWEEN #{currentPage}*#{size} - (#{size}-1) AND #{currentPage}*#{size}
+</select>
+
+<select id="getAllBoardTotal" resultType="int">
+	select count(*) from TEAMBOARD 
+</select>
+
+<update id="insertBoard" parameterType="eagles.news.vo.TeamBoardVO">
+   insert into teamboard( TEAMBOARD_CD, TEAMBOARD_TITLE, TEAMBOARD_CONTENT, TEAMBOARD_FIX,  MEM_ID, TEAMBOARD_IMG ) 
+   values( 'TB' || bt_sequence.nextval, #{teamboardTitle}, #{teamboardContent}, #{teamboardFix}, #{memId}, #{teamboardImg})
+</update>
+
+<select id="getBoard" resultType="eagles.news.vo.TeamBoardVO">
+   select * from teamboard 
+   where teamboard_cd = #{teamboardCd}
+</select>
+
+<update id="updateBoard" parameterType="eagles.news.vo.TeamBoardVO">
+ update teamboard 
+ set teamboard_title = #{teamboardTitle}, 
+ teamboard_content = #{teamboardContent},
+ teamboard_fix = #{teamboardFix},
+ teamboard_img = #{teamboardImg}
+ where teamboard_cd = #{teamboardCd}
+</update>
+
+<delete id="deleteBoard">
+ delete from teamboard  
+ where teamboard_cd = #{teamboardCd}
+
+</delete>
+
+</mapper>

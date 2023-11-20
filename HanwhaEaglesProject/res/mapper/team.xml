@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="team">
+
+<select id="getTeam" parameterType="String" resultType="eagles.team.vo.TeamVO">
+<!-- 	select game_cd as gameCode, -->
+<!-- 		   to_char(game_date, 'yyyy-mm-dd') as gameDate, -->
+<!-- 		   game_score as gameScore, -->
+<!-- 		   game_home as gameHome, -->
+<!-- 		   game_result as gameResult, -->
+<!-- 		   team_cd as teamCode -->
+<!-- 		   from game  -->
+<!-- 		   where game_cd = #{gameCode} -->
+		   select team_cd as teamCode, 
+		   		  team_name as teamName, 
+		   		  team_logo as teamLogo, 
+		   		  from team 
+		   		  
+</select>
+<select id="getAllTeam" parameterType="String" resultType="eagles.team.vo.TeamVO">
+	
+	select * from team
+	</select>
+</mapper>

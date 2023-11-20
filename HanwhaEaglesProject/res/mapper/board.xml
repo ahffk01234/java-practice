@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+<resultMap type="eagles.board.vo.BoardVO" id="boardMap">
+		<result column="board_cd" property="boardCd" />
+		<result column="board_title" property="boardTitle" />
+		<result column="board_content" property="boardContent" />
+		<result column="board_date" property="boardDate" />
+		<result column="board_like" property="boardLike" />
+		<result column="board_report" property="boardReport" />
+		<result column="mem_id" property="memId" />
+		<result column="board_img" property="boardImg" />
+		<result column="RNUM" property="rnum" />
+	</resultMap>
+
+<select id="getAllBoard" parameterType="hashMap" resultMap="boardMap">
+	WITH T AS(
+	    SELECT ROW_NUMBER() OVER(ORDER BY BOARD_DATE DESC)
+	     RNUM, BOARD_CD, BOARD_TITLE, BOARD_CONTENT, BOARD_DATE, BOARD_LIKE, BOARD_REPORT, MEM_ID, BOARD_IMG FROM BOARD 
+	) 
+	
+    SELECT * FROM T 
+	WHERE T.RNUM BETWEEN #{currentPage}*#{size} - (#{size}-1) AND #{currentPage}*#{size}
+</select>
+
+<select id="getAllBoardTotal" resultType="int">
+	select count(*) from BOARD 
+</select>
+
+<insert id="insertBoard" parameterType="eagles.board.vo.BoardVO">
+  insert into board( BOARD_CD, BOARD_TITLE, BOARD_CONTENT, MEM_ID, BOARD_IMG )
+   values ( board_sequence.nextval, #{boardTitle}, #{boardContent}, #{memId}, #{boardImg} )
+</insert>
+
+<select id="getBoard" resultType="eagles.board.vo.BoardVO">
+	select * from board 
+	where BOARD_CD = #{boardCd}
+</select>
+
+<update id="updateBoard" parameterType="eagles.board.vo.BoardVO">
+ update board 
+ set board_title = #{boardTitle}, 
+ board_content = #{boardContent},
+ board_img = #{boardImg} 
+ where mem_id = #{memId} and board_cd = #{boardCd} 
+</update>
+
+<delete id="deleteBoard">
+delete from board 
+ where board_cd = #{boardCd} 
+</delete>
+
+<select id="likeChk" resultType="int" parameterType="eagles.board.vo.LikeVO" >
+select count(*) from bdlike 
+ where board_cd = #{boardCd} and mem_id = #{memId} 
+</select>
+
+<insert id="likeUpdate" parameterType="eagles.board.vo.LikeVO">
+insert into bdlike(board_cd, mem_id) 
+values ( #{boardCd}, #{memId} )
+</insert>
+
+<delete id="likeDelete" parameterType="eagles.board.vo.LikeVO">
+delete from bdlike 
+ where board_cd = #{boardCd} and mem_id = #{memId} 
+</delete>
+
+<select id="likeAll" resultType="int">
+select count(*) from bdlike 
+ where board_cd = #{boardCd}
+</select>
+
+<resultMap type="eagles.board.vo.ReportVO" id="reportMap">
+		<result column="board_cd" property="boardCd" />
+		<result column="report_id" property="reportId" />
+		<result column="report_content" property="reportContent" />
+		<result column="result_rst" property="resultRst" />
+		<result column="RNUM" property="rnum" />
+</resultMap>
+
+<insert id="sendReport" parameterType="eagles.board.vo.ReportVO">
+insert into report(BOARD_CD, REPORT_ID, REPORT_CONTENT) 
+ values( #{boardCd}, #{reportId}, #{reportContent} )
+</insert>
+
+<select id="reportAll" parameterType="hashMap" resultMap="reportMap">
+WITH T AS(
+	    SELECT ROW_NUMBER() OVER(ORDER BY BOARD_CD DESC) 
+	    RNUM, BOARD_CD, REPORT_ID, REPORT_CONTENT, RESULT_RST FROM REPORT  
+	)
+	SELECT * FROM T
+	WHERE T.RNUM BETWEEN #{currentPage}*#{size} - (#{size}-1) AND #{currentPage}*#{size}
+</select>
+
+<select id="reportTotal" resultType="int">
+	select count(*) from report 
+</select>
+
+<delete id="deleteReport">
+delete from report 
+ where board_cd = #{boardCd}
+</delete>
+
+<delete id="passReport" parameterType="eagles.board.vo.ReportVO">
+delete from report
+ where board_cd = #{boardCd} and report_id = #{reportId}
+</delete>
+
+<select id="getAllComment" resultType="eagles.board.vo.CommentVO">
+SELECT *
+FROM boardcomment
+WHERE board_cd = #{boardCd} 
+ORDER BY COMMENT_DATE DESC
+</select>
+
+<insert id="insertComment" parameterType="eagles.board.vo.CommentVO">
+insert into boardcomment ( COMMENT_CD, COMMENT_CONTENT, MEM_ID, BOARD_CD )
+values( comment_sequence.nextval, #{commentContent}, #{memId}, #{boardCd} )
+</insert>
+
+<delete id="deleteComment">
+delete from boardcomment
+ where comment_cd = #{commentCd}
+</delete>
+
+<update id="updateComment">
+update boardcomment 
+ set COMMENT_CONTENT = #{commentContent} 
+ where COMMENT_CD = #{commentCd}
+</update>
+
+	
+</mapper>

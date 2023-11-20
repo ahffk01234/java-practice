@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration> 
+
+	<properties resource="db.properties" />
+	
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL" /> <!-- oracle 부적합한 열유형 null처리 -->
+		
+	</settings>
+	
+	<environments default="dev">
+	<environment id="dev">
+		<transactionManager type="JDBC" />
+		<dataSource type="POOLED">
+			<property name="driver" value="${driver}"/>
+			<property name="url" value="${url}"/>
+			<property name="username" value="${username}"/>
+			<property name="password" value="${password}"/>
+			<!-- 활성화 된 최대 커넥션 수 -->
+			<property name="poolMaximumActiveConnections" value="7"/>
+			<property name="poolMaximumIdleConnections" value="7"/>
+		</dataSource>
+	</environment>
+	
+	</environments>
+	
+	<mappers>
+		<mapper resource="mapper/Ticket.xml"/>
+		<mapper resource="mapper/payticket.xml"/>
+		<mapper resource="mapper/seat.xml"/>
+		<mapper resource="mapper/teamBoard.xml"/>
+		<mapper resource="mapper/prod.xml"/>
+		<mapper resource="mapper/member.xml"/>
+		<mapper resource="mapper/game.xml"/>
+		<mapper resource="mapper/gall.xml"/>
+		<mapper resource="mapper/team.xml"/>
+		<mapper resource="mapper/cart.xml"/>
+		<mapper resource="mapper/teamBoard.xml"/>
+		<mapper resource="mapper/board.xml"/>
+		<mapper resource="mapper/forecast.xml"/>
+		<mapper resource="mapper/memticketpay.xml"/>
+		<mapper resource="mapper/ask.xml"/>
+	</mappers>
+</configuration>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="forecast">
+	
+	
+
+	<select id="showtalk" parameterType="String" resultType="eagles.forecast.vo.TalkVO">
+	
+	select talk_cd as talkCd,
+		 game_cd as gameCd,
+		 talk_content as talkContent,
+		 talk_date as talkDate,
+		 talk_report as talkReport,
+		 mem_id as memId
+	from talk
+	where game_cd = #{gameCd}
+	order by talk_date desc
+	
+	</select>
+	
+	
+	<insert id="inputtalk" parameterType="eagles.forecast.vo.TalkVO">
+	
+	insert into talk (talk_cd, game_cd, talk_content, mem_id)
+			values (talkcd.nextval, #{gameCd}, #{talkContent} ,#{memId})
+			 
+	
+	</insert>
+
+	<insert id="inputforecast" parameterType="eagles.forecast.vo.ForecastVO">
+	
+	insert into forecast (game_cd, mem_id, team_cd)
+			values (#{gameCd}, #{memId}, #{teamCd})
+			 
+	
+	</insert>
+
+
+	<select id="showforecast" parameterType="String" resultType="eagles.forecast.vo.ForecastVO">
+	
+	select game_cd as gameCd,
+		 mem_id as memId,
+		 forecast_cd as forecastCd,
+		 team_cd as teamCd
+	from forecast
+	where game_cd = #{gameCd}
+
+	
+	</select>
+
+
+	<update id="updateGameResult" parameterType="eagles.forecast.vo.ForecastVO">
+	
+	update forecast set forecast_cd = #{forecastCd} where game_cd = #{gameCd}
+	
+	</update>
+
+
+	<update id="updateGameResult2" parameterType="eagles.forecast.vo.ForecastVO">
+	
+	update game set game_score = #{forecastCd} where game_cd = #{gameCd}
+	
+	</update>
+
+
+	<select id="getGameScore" parameterType="String" resultType="eagles.forecast.vo.GamesVO">
+	
+	select game_score as gameScore, game_cd as gameCd from game where game_cd = #{gameCd}
+	 
+	
+	</select>
+
+
+
+ 
+</mapper>

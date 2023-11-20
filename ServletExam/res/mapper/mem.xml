@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mem">
+<select id="getMember" parameterType="String" resultType="eagle.member.vo.memVO">
+	select mem_id as memId, 
+		   mem_pw as memPw,
+		   mem_name as memName,
+		   mem_nickname as memNick,
+		   mem_tel as memTel, 
+		   mem_birth as memBirth,
+		   mem_mail as memMail,
+		   mem_addr as memAddr,
+		   mem_black as memBlack
+		   from mem
+		   where mem_id = #{memId}
+	</select>
+	
+	<resultMap type="eagle.member.vo.memVO" id="memMap">
+		<result column="mem_id" property="memId"/>
+		<result column="mem_pw" property="memPw"/>
+		<result column="mem_name" property="memName"/>
+		<result column="mem_nickname" property="memNick"/>
+		<result column="mem_tel" property="memTel"/>
+		<result column="mem_birth" property="memBirth"/>
+		<result column="mem_mail" property="memMail"/>
+		<result column="mem_addr" property="memAddr"/>
+		<result column="mem_black" property="memBlack"/>
+	</resultMap>
+	<select id="getAllMember" resultMap="memMap">
+	select * from mem
+
+	</select>
+</mapper>

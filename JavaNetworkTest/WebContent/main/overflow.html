@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>전자액자만들기(feat.overflow)</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <style>
+        img{
+            width: 100px;
+            height: 100px;
+            float: left;
+        }
+        #wrapper{
+            border: 7px double gray;
+            width: 100px;
+            height: 100px;
+            position: relative;/*  부모자격부여 */
+            left: 50px;
+            top: 50px;
+            overflow: hidden;
+        }
+        .child{
+            position: absolute;
+            width: 600px;
+            /* font-size: 0; */
+            left: 0px;
+            top: 0px;
+        }
+        #wrapper .child:first-child{
+            z-index: 1x;
+        }
+
+
+        
+    </style>
+</head>
+<body>
+    <div id="wrapper">
+        <div class="child">
+            <img src="../images/ala.jpg" alt="">
+            <img src="../images/" alt="">
+            <img src="../images/" alt="">
+            <img src="../images/" alt="">
+            <img src="../images/" alt="">
+            <img src="../images/" alt="">
+        </div>
+        <div class="child">
+            <img src="../images/suzy.jpg" alt="">
+            <img src="../images/" alt="">
+            <img src="../images/" alt="">
+            <img src="../images/" alt="">
+            <img src="../images/" alt="">
+            <img src="../images/" alt="">
+        </div>
+    </div>
+
+    <script>
+        var child1 = document.querySelector('.child:first-child');
+        var child2 = document.querySelector('.child:last-child');
+
+        console.log(child1, ' | ', child2);
+
+    if(!child2.style.left){
+        child1.style.left = "0px"; // 이미지그룹1 값 초기화
+        child2.style.left="600px"; // 이미지그룹2 값 초기화
+    }
+
+    // image move
+    function f_move(){
+
+        // 이미지 반복을 위한 위치 초기화
+        if(parseInt(child1.style.left) == -600) child1.style.left ="600px";
+        if(parseInt(child2.style.left) == -600) child2.style.left ="600px";
+        // 이미지 움직임을 위한 값 대입
+        child1.style.left = parseInt(child1.style.left) - 1 + "px";
+        child2.style.left = parseInt(child2.style.left) - 1 + "px";
+
+        // setTimeout - ms이 지났을때 fn을 호출시켜주는 함수
+        // 함수 안에서 함수를 호출시 ()기호 작성하지 않음
+        setTimeout(f_move,10);
+    }
+f_move(); // 함수 호출
+
+
+    </script>
+</body>
+</html>

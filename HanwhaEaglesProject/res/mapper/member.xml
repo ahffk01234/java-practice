@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member">
+
+	<insert id="insertMember" parameterType="eagles.member.vo.MemberVO">
+	insert into mem (MEM_ID, MEM_PW, MEM_NAME, MEM_NICKNAME, MEM_TEL
+ , MEM_BIRTH, MEM_MAIL, MEM_ADDR) 
+	values(#{memId}, #{memPw}, #{memName}, #{memNickname}, #{memTel} 
+	, #{memBirth}, #{memMail}, #{memAddr})
+	</insert>
+
+	<select id="loginChk" resultType="string">
+		select mem_id from MEM
+			where mem_id = #{mId} and mem_pw = #{mPw}
+	</select>
+	
+	<select id="getMember" parameterType="string" resultType="eagles.member.vo.MemberVO">
+    select * from mem 
+    where mem_id = #{mId}
+	</select>
+	
+	<select id="findId" parameterType="eagles.member.vo.MemberVO" resultType="eagles.member.vo.MemberVO">
+	select * from mem 
+	where mem_name = #{memName} and 
+	mem_birth = #{memBirth} and mem_mail = #{memMail} 
+	</select>
+	
+	<select id="findPw" parameterType="eagles.member.vo.FindMemberVO" resultType="eagles.member.vo.FindMemberVO">
+	select * from mem 
+	where mem_id = #{memId} and 
+	mem_name = #{memName} and mem_mail = #{memMail} 
+	</select>
+	
+	<update id="updateMember" parameterType="eagles.member.vo.MemberVO">
+	update mem 
+	set mem_id = #{memId}, 
+	mem_pw = #{memPw}, 
+	mem_name = #{memName}, 
+	mem_nickname = #{memNickname},  
+	mem_tel = #{memTel}, 
+	mem_birth = #{memBirth}, 
+	mem_mail = #{memMail}, 
+	mem_addr = #{memAddr} 
+	where mem_id = #{memId}
+	</update>
+	
+	<delete id="deleteMember">
+	delete from mem 
+	where mem_id = #{memId}
+	</delete>
+	
+	<resultMap type="eagles.member.vo.MemberVO" id="blackMap">
+		<result column="mem_id" property="memId" />
+		<result column="mem_name" property="memName" />
+		<result column="mem_nickname" property="memNickname" />
+		<result column="mem_mail" property="memMail" />
+		<result column="mem_black" property="memBlack" />
+		<result column="RNUM" property="rnum" />
+	</resultMap>
+	<!-- 
+	map.put("memBlack", "1");
+	map.put("currentPage",1);
+	map.put("size",10);
+	 -->
+	<select id="getBlackMember" parameterType="hashMap" resultMap="blackMap">
+	WITH T AS(
+	    SELECT ROW_NUMBER() OVER(ORDER BY MEM_REG_DATE DESC) RNUM, MEM_ID, MEM_PW, MEM_NAME, MEM_NICKNAME, MEM_TEL, MEM_BIRTH, MEM_MAIL, MEM_ADDR, MEM_BLACK, MEM_REG_DATE FROM MEM 
+	    WHERE MEM_BLACK = #{memBlack}
+	)
+	SELECT * FROM T
+	WHERE T.RNUM BETWEEN #{currentPage}*#{size} - (#{size}-1) AND #{currentPage}*#{size}
+	</select>
+	
+	<select id="getBlackMemberTotal" resultType="int">
+	select count(*) from mem 
+	where mem_black = 1
+	</select>
+	
+	
+	
+	<update id="updateBlack">
+	update mem 
+	set mem_black = '0' 
+	where mem_id = #{memId}
+	</update>
+	
+	<update id="helloBlack">
+	update mem 
+	set mem_black = '1' 
+	where mem_id = #{memId}
+	</update>
+	
+	
+</mapper>

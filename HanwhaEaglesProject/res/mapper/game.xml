@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="game">
+
+<!-- <select id="getGame" parameterType="String" resultType="eagles.games.vo.GamesVO"> -->
+<!-- 		   select a.game_cd as gameCode,  -->
+<!-- 		   		a.game_date as gameDate,  -->
+<!-- 		   		a.game_score as gameScore,  -->
+<!-- 		   		a.game_home as gameHome,  -->
+<!-- 		   		a.game_result as gameResult,  -->
+<!-- 		   		a.game_month as gameMonth, -->
+<!-- 		   		b.team_name as teamCode,  -->
+<!-- 		   		from game a, team b  -->
+<!-- 		   		where a.team_cd= b.team_cd; -->
+<!-- </select> -->
+	<resultMap type="eagles.games.vo.GamesVO" id="gameMap">
+		<result column="gameCode" property="gameCode"/>
+		<result column="gameDate" property="gameDate"/>
+		<result column="gameScore" property="gameScore"/>
+		<result column="gameHome" property="gameHome"/>
+		<result column="gameResult" property="gameResult"/>
+		<result column="gameMonth" property="gameMonth"/>
+		<result column="teamCode" property="teamCode"/>
+		<result column="teamLogo" property="teamLogo"/>
+	</resultMap>
+<select id="getAllGame" parameterType="String" resultType="eagles.games.vo.GamesVO" >
+	
+	select * from game order by game_month
+	</select>
+
+<select id="selectGame" resultMap="gameMap" parameterType="String">
+<![CDATA[
+			SELECT g.GAME_CD as gameCode, 
+		   		   g.GAME_DATE as gameDate, 
+		   		   g.GAME_SCORE as gameScore, 
+		   		   g.GAME_HOME as gameHome, 
+		   		   g.GAME_RESULT as gameResult, 
+		   		   g.TEAM_CD as teamCode, 
+		   		   g.GAME_MONTH as gameMonth, 
+                   t.team_logo as teamLogo
+    FROM game g
+    JOIN team t ON g.team_cd = t.team_cd;
+      ]]>
+		   		
+</select>
+</mapper>

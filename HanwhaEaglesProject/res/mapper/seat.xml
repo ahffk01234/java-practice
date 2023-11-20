@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="seat">
+<resultMap type="eagles.seat.vo.SeatVO" id="ticketMap">
+
+		<result column="SEAT_CD" property="seatCd"/>
+		<result column="GAME_CD" property="gameCd"/>
+		<result column="SEAT_RES" property="seatRes"/>
+		<result column="MEM_ID"	property="memId"/>
+		<result column="TICKET_CD"	property="ticketCd"/>
+	</resultMap>
+
+<select id="showAllSeat" parameterType="String">
+	select 
+			SEAT_CD as seatCode, 
+			GAME_CD as gameCode, 
+			SEAT_AREA as seatArea, 
+			SEAT_RES as seatRes, 
+			MEM_ID as memId, 
+			TICKET_CD as ticketCd
+			
+	from seat where game_cd = #{gameCode}
+
+</select>
+
+<insert id="insertSeat" parameterType="eagles.seat.vo.SeatVO">
+
+insert into seat(SEAT_CD, 
+				GAME_CD, 
+				SEAT_RES, 
+				MEM_ID, 
+				TICKET_CD) 
+			values(#{seatCd}, 
+				#{gameCd},
+				'0', 
+				#{memId}, 
+				#{ticketCd})
+
+
+</insert>
+
+<update id="chgRes" parameterType="eagles.seat.vo.SeatVO">
+update seat set seat_res = '1' where seat_cd = #{seatCd} 
+
+</update>
+
+<delete id="deleteSeat">
+	delete seat where ticket_cd = #{ticketCd}
+</delete>
+
+
+</mapper>
+
